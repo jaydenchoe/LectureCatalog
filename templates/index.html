@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}기술 강의 소개 - 메인{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="fas fa-rocket me-3 text-primary"></i>
+            전문 기술 강의
+        </h1>
+        <p class="lead text-muted">
+            최신 기술 트렌드를 반영한 실무 중심의 전문 교육 과정을 소개합니다
+        </p>
+    </div>
+
+    <!-- Courses Grid -->
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-lg-6 col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-dark border-0">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-0 fw-bold">{{ course.title }}</h5>
+                        <span class="badge bg-primary">{{ course.category }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted mb-3">{{ course.description }}</p>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                <small class="text-muted">
+                                    <strong>{{ course.duration.days }}일</strong>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <small class="text-muted">
+                                    <strong>{{ course.duration.hours }}시간</strong>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-users text-primary me-2"></i>
+                            <strong class="small">대상</strong>
+                        </div>
+                        <ul class="list-unstyled ms-3">
+                            {% for target in course.targets[:2] %}
+                            <li class="small text-muted">• {{ target }}</li>
+                            {% endfor %}
+                            {% if course.targets|length > 2 %}
+                            <li class="small text-muted">• 외 {{ course.targets|length - 2 }}개 대상</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" 
+                       class="btn btn-outline-primary w-100">
+                        <i class="fas fa-info-circle me-2"></i>
+                        상세 정보 보기
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not courses %}
+    <div class="text-center py-5">
+        <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">등록된 강의가 없습니다</h3>
+        <p class="text-muted">새로운 강의가 곧 업데이트됩니다.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

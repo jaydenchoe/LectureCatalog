@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - 강의 상세{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Course Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ url_for('index') }}" class="text-decoration-none">
+                            <i class="fas fa-home me-1"></i>홈
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">강의 상세</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="display-5 fw-bold mb-2">{{ course.title }}</h1>
+                    <span class="badge bg-primary fs-6">{{ course.category }}</span>
+                </div>
+            </div>
+            
+            <p class="lead text-muted">{{ course.description }}</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column - Course Details -->
+        <div class="col-lg-8">
+            <!-- Course Overview -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        강의 개요
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ course.overview }}</p>
+                </div>
+            </div>
+
+            <!-- Learning Objectives -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-bullseye me-2"></i>
+                        학습 목표
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <ol class="list-group list-group-flush">
+                        {% for objective in course.objectives %}
+                        <li class="list-group-item border-0 px-0">{{ objective }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Curriculum -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-list-alt me-2"></i>
+                        강의 커리큘럼
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="border-0">일차</th>
+                                    <th scope="col" class="border-0">주제</th>
+                                    <th scope="col" class="border-0">실습 내용</th>
+                                    <th scope="col" class="border-0 text-center">시간</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for day in course.curriculum %}
+                                <tr>
+                                    <td class="fw-bold">{{ day.day }}일차</td>
+                                    <td>{{ day.topic }}</td>
+                                    <td class="text-muted">{{ day.content }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-secondary">{{ day.hours }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Sidebar -->
+        <div class="col-lg-4">
+            <!-- Course Info Card -->
+            <div class="card mb-4 border-0 shadow-sm sticky-top">
+                <div class="card-header bg-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>
+                        강의 정보
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="text-center p-3 bg-body-secondary rounded">
+                                <i class="fas fa-calendar-alt fa-2x text-primary mb-2"></i>
+                                <div class="fw-bold">{{ course.duration.days }}일</div>
+                                <small class="text-muted">교육 기간</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-3 bg-body-secondary rounded">
+                                <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                                <div class="fw-bold">{{ course.duration.hours }}시간</div>
+                                <small class="text-muted">총 시간</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-users me-2"></i>
+                            학습 대상
+                        </h6>
+                        <ul class="list-unstyled">
+                            {% for target in course.targets %}
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                {{ target }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            수료 기준
+                        </h6>
+                        <ul class="list-unstyled">
+                            {% for criterion in course.completion_criteria %}
+                            <li class="mb-2">
+                                <i class="fas fa-star text-warning me-2"></i>
+                                {{ criterion }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    {% if course.additional_info %}
+                    <div>
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-info me-2"></i>
+                            추가 안내
+                        </h6>
+                        <ul class="list-unstyled">
+                            {% for info in course.additional_info %}
+                            <li class="mb-2">
+                                <i class="fas fa-lightbulb text-info me-2"></i>
+                                {{ info }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-5">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            강의 목록으로 돌아가기
+        </a>
+    </div>
+</div>
+{% endblock %}
